@@ -1,0 +1,12 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet"
+  },
+  "PlaidApiConfig": {
+    "EnvUrl": "-->ADD THIS PARAMETER IN secret.settings.json<--",
+    "ClientId": "-->ADD THIS PARAMETER IN secret.settings.json<--",
+    "Secret": "-->ADD THIS PARAMETER IN secret.settings.json<--"
+  }
+}
