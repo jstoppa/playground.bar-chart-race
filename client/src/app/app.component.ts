@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TokenizeResult } from '@angular/compiler/src/ml_parser/lexer';
 import { Component, HostBinding } from '@angular/core';
 import { AppConfigService } from './app-config.service';
+import { Country } from './app.models';
 import { PlaidErrorMetadata, PlaidErrorObject, PlaidEventMetadata, PlaidSuccessMetadata } from './plaid-config.model';
 import { PlaidLinkHandler } from './plaid-link-handler';
 import { PlaidApi } from './plaid.service';
@@ -14,20 +15,25 @@ import { PlaidApi } from './plaid.service';
 
 export class AppComponent {
 
-  title = 'appName';
-  svg: any;
+  countries = [
+    { code: 'US', name: 'United States' } as Country,
+    { code: 'GB', name: 'United Kingdom' } as Country
+  ];
+  selectedCountry = 'US';
 
   constructor(private plaidApi: PlaidApi, private appConfigService: AppConfigService, private http: HttpClient) {
   }
 
+
+
   connectToPlaid() {
     if (AppConfigService?.settings?.apiService) {
-      this.http.get(`${AppConfigService.settings.apiService}/api/plaid/token/create`,
+      this.http.get(`${AppConfigService.settings.apiService}/api/plaid/token/create?countryCode=${this.selectedCountry}`,
         { headers: new HttpHeaders({ 'Content-Type': 'application/json' }), responseType: 'text' }
-      ).toPromise().then((accessToken: string) => {
+      ).toPromise().then((linkToken: string) => {
         this.plaidApi
           .createPlaid({
-            token: accessToken,
+            token: linkToken,
             onSuccess: (publicToken, metadata) => this.onSuccess(publicToken, metadata),
             onExit: (err, metadata) => this.onExit(err, metadata),
             onEvent: (eventName, metadata) => this.onEvent(eventName, metadata),
@@ -48,7 +54,13 @@ export class AppComponent {
   }
 
   onSuccess(token: string, metadata: PlaidSuccessMetadata) {
-    // debugger;
+    if (AppConfigService?.settings?.apiService) {
+      this.http.post(`${AppConfigService.settings.apiService}/api/plaid/token/exchange`,
+        `{ "public_token": "${token}" }`,
+        { headers: new HttpHeaders({ 'Content-Type': 'application/json' }), responseType: 'text' },
+      ).toPromise().then((accessToken: string) => {
+      });
+    }
   }
 }
 

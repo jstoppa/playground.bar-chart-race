@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { AppBarChartRaceComponent } from './app-bar-chart-race.component';
 import { AppConfigService } from './app-config.service';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 export function initializeApp(appConfigService: AppConfigService) {
   return (): Promise<any> => {
@@ -19,7 +20,8 @@ export function initializeApp(appConfigService: AppConfigService) {
   ],
   imports: [
     BrowserModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [
     { provide: APP_INITIALIZER, useFactory: initializeApp, deps:  [AppConfigService], multi: true}
