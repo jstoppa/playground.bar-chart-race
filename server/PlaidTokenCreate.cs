@@ -30,7 +30,7 @@ namespace My.Functions
                 .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile("secret.settings.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables()
-                .Build();
+                .Build(); 
             
             var apiConfig = new PlaidApiConfig();
             config.Bind(nameof(PlaidApiConfig), apiConfig);

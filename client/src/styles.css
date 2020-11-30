@@ -1,4 +1,11 @@
+@import 'tailwindcss/base';
+
+@import 'tailwindcss/components';
+
+@import 'tailwindcss/utilities';
+
 body {
   margin: 0px;
   font-family: -apple-system, BlinkMacSystemFont,"segoe ui",Roboto, Oxygen, Ubuntu, Cantarell, "open sans", "helvetica neue", sans-serif;
 }
+
