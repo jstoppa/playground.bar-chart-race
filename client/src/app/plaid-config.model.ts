@@ -44,7 +44,7 @@ export interface PlaidOnExitArgs {
 }
 
 export interface PlaidOnEventArgs {
-  eventName: string;
+  eventName: EventName;
   metadata: PlaidEventMetadata;
 }
 
@@ -59,7 +59,7 @@ export interface PlaidEventMetadata {
   request_id: string;
   link_session_id: string;
   mfa_type: string;
-  view_name: string;
+  view_name: ViewName;
   timestamp: string;
 }
 
@@ -76,4 +76,15 @@ export interface PlaidConfig {
   onSuccess(publicToken, metadata): any;
   onExit(err, metadata): any;
   onEvent(eventName, metadata): any;
+}
+
+export enum EventName {
+  OPEN = "OPEN",
+  TRANSITION_VIEW = "TRANSITION_VIEW"
+}
+
+export enum ViewName {
+  SELECT_INSTITUTION = "SELECT_INSTITUTION",
+  CONNECTED = "CONNECTED",
+  EU_CONSENT = "EU_CONSENT"
 }

@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { AppConfigService } from './app-config.service';
 import { Country } from './app.models';
-import { PlaidErrorMetadata, PlaidErrorObject, PlaidEventMetadata, PlaidSuccessMetadata } from './plaid-config.model';
+import { EventName, PlaidErrorMetadata, PlaidErrorObject, PlaidEventMetadata, PlaidSuccessMetadata, ViewName } from './plaid-config.model';
 import { PlaidApi } from './plaid.service';
 
 @Component({
@@ -19,8 +19,8 @@ export class AppComponent {
   ];
   selectedCountry = 'GB';
   accessToken = '';
-  eventName = '';
-  metadata = {};
+  eventName: EventName;
+  metadata: PlaidEventMetadata;
 
   constructor(private plaidApi: PlaidApi, private appConfigService: AppConfigService, private http: HttpClient) {
   }
@@ -50,17 +50,19 @@ export class AppComponent {
     // debugger;
   }
 
-  onEvent(eventName: string, metadata: PlaidEventMetadata) {
+  onEvent(eventName: EventName, metadata: PlaidEventMetadata) {
     this.eventName = eventName;
     this.metadata = metadata;
-    // console.log('eventName = ' + eventName);
-    // console.log('metadata.view_name = ' + metadata.view_name);
+    
+    if (eventName === EventName.TRANSITION_VIEW && this.metadata.view_name === ViewName.CONNECTED && this.accessToken) {
+      this.http.post(`${AppConfigService.settings.apiService}/api/plaid/identity/get`,
+        `{ "access_token": "${this.accessToken}" }`,
+        { headers: new HttpHeaders({ 'Content-Type': 'application/json' }), responseType: 'text' },
+      ).toPromise().then((accessToken: string) => {
+        debugger;
+      });
 
-    // switch (eventName) {
-    //   case 'TRANSITION_VIEW':
-    //     debugger;
-    //   break;
-    // }
+    }
   }
 
   onSuccess(token: string, metadata: PlaidSuccessMetadata) {
